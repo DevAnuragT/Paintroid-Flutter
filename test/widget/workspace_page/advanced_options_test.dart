@@ -6,11 +6,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:paintroid/core/localization/app_localizations.dart';
 import 'package:paintroid/ui/pages/workspace_page/workspace_page.dart';
 import 'package:paintroid/ui/theme/theme.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   late Widget sut;
 
   setUp(() {
+    SharedPreferences.setMockInitialValues({});
+
     final lightTheme = LightPaintroidThemeData();
     final darkTheme = DarkPaintroidThemeData();
 
@@ -56,5 +59,17 @@ void main() {
 
     await tester.tap(find.text('OK'));
     await tester.pumpAndSettle();
+
+    await tester.tap(find.byIcon(Icons.more_vert));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('Advanced Options'));
+    await tester.pumpAndSettle();
+
+    final switchesAfterReopen =
+        tester.widgetList<Switch>(find.byType(Switch)).toList();
+    expect(switchesAfterReopen.length, 2);
+    expect(switchesAfterReopen[0].value, isTrue);
+    expect(switchesAfterReopen[1].value, isFalse);
   });
 }

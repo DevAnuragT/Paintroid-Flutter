@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:oxidized/oxidized.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:toast/toast.dart';
 
 import 'package:paintroid/core/database/project_database.dart';
@@ -93,8 +94,12 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
   }
 
   Future<void> _showAdvancedOptionsDialog() async {
-    bool isAntialiasingEnabled = false;
-    bool isSmoothingEnabled = false;
+    const antialiasingKey = 'advancedOptionsAntialiasing';
+    const smoothingKey = 'advancedOptionsSmoothing';
+    final prefs = await SharedPreferences.getInstance();
+
+    bool isAntialiasingEnabled = prefs.getBool(antialiasingKey) ?? false;
+    bool isSmoothingEnabled = prefs.getBool(smoothingKey) ?? false;
 
     await showDialog<void>(
       context: context,
@@ -126,7 +131,15 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
                   child: const Text('CANCEL'),
                 ),
                 TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () async {
+                    await prefs.setBool(
+                        antialiasingKey, isAntialiasingEnabled);
+                    await prefs.setBool(smoothingKey, isSmoothingEnabled);
+
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                   child: const Text('OK'),
                 ),
               ],
