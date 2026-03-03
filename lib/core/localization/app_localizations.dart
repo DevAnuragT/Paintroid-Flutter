@@ -123,6 +123,36 @@ abstract class AppLocalizations {
   /// **'Save project'**
   String get saveProject;
 
+  /// No description provided for @advancedOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced Options'**
+  String get advancedOptions;
+
+  /// No description provided for @antialiasing.
+  ///
+  /// In en, this message translates to:
+  /// **'Antialiasing'**
+  String get antialiasing;
+
+  /// No description provided for @smoothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoothing'**
+  String get smoothing;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'CANCEL'**
+  String get cancel;
+
   /// No description provided for @tools.
   ///
   /// In en, this message translates to:

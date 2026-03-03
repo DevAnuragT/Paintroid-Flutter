@@ -19,6 +19,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get saveProject => 'Save project';
 
   @override
+  String get advancedOptions => 'Advanced Options';
+
+  @override
+  String get antialiasing => 'Antialiasing';
+
+  @override
+  String get smoothing => 'Smoothing';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get cancel => 'CANCEL';
+
+  @override
   String get tools => 'Tools';
 
   @override

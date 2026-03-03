@@ -39,7 +39,7 @@ enum OverflowMenuOption {
       case OverflowMenuOption.saveProject:
         return localizations.saveProject;
       case OverflowMenuOption.advancedOptions:
-        return 'Advanced Options';
+        return localizations.advancedOptions;
     }
   }
 }
@@ -52,6 +52,10 @@ class OverflowMenu extends ConsumerStatefulWidget {
 }
 
 class _OverflowMenuState extends ConsumerState<OverflowMenu> {
+  static const _advancedOptionsAntialiasingKey =
+      'advancedOptionsAntialiasing';
+  static const _advancedOptionsSmoothingKey = 'advancedOptionsSmoothing';
+
   IOHandler get ioHandler => ref.read(IOHandler.provider);
 
   @override
@@ -94,12 +98,13 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
   }
 
   Future<void> _showAdvancedOptionsDialog() async {
-    const antialiasingKey = 'advancedOptionsAntialiasing';
-    const smoothingKey = 'advancedOptionsSmoothing';
+    final localizations = AppLocalizations.of(context);
     final prefs = await SharedPreferences.getInstance();
 
-    bool isAntialiasingEnabled = prefs.getBool(antialiasingKey) ?? false;
-    bool isSmoothingEnabled = prefs.getBool(smoothingKey) ?? false;
+    bool isAntialiasingEnabled =
+      prefs.getBool(_advancedOptionsAntialiasingKey) ?? false;
+    bool isSmoothingEnabled =
+      prefs.getBool(_advancedOptionsSmoothingKey) ?? false;
 
     await showDialog<void>(
       context: context,
@@ -107,18 +112,18 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: const Text('Advanced Options'),
+              title: Text(localizations.advancedOptions),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SwitchListTile(
-                    title: const Text('Antialiasing'),
+                    title: Text(localizations.antialiasing),
                     value: isAntialiasingEnabled,
                     onChanged: (value) =>
                         setDialogState(() => isAntialiasingEnabled = value),
                   ),
                   SwitchListTile(
-                    title: const Text('Smoothing'),
+                    title: Text(localizations.smoothing),
                     value: isSmoothingEnabled,
                     onChanged: (value) =>
                         setDialogState(() => isSmoothingEnabled = value),
@@ -128,19 +133,24 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: const Text('CANCEL'),
+                  child: Text(localizations.cancel),
                 ),
                 TextButton(
                   onPressed: () async {
                     await prefs.setBool(
-                        antialiasingKey, isAntialiasingEnabled);
-                    await prefs.setBool(smoothingKey, isSmoothingEnabled);
+                      _advancedOptionsAntialiasingKey,
+                      isAntialiasingEnabled,
+                    );
+                    await prefs.setBool(
+                      _advancedOptionsSmoothingKey,
+                      isSmoothingEnabled,
+                    );
 
                     if (context.mounted) {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: const Text('OK'),
+                  child: Text(localizations.ok),
                 ),
               ],
             );
