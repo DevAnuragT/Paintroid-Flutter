@@ -21,7 +21,8 @@ enum OverflowMenuOption {
   saveImage,
   saveProject,
   loadImage,
-  newImage;
+  newImage,
+  advancedOptions;
 
   String localizedLabel(BuildContext context) {
     final localizations = AppLocalizations.of(context);
@@ -36,6 +37,8 @@ enum OverflowMenuOption {
         return localizations.newImage;
       case OverflowMenuOption.saveProject:
         return localizations.saveProject;
+      case OverflowMenuOption.advancedOptions:
+        return 'Advanced Options';
     }
   }
 }
@@ -83,7 +86,55 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
       case OverflowMenuOption.newImage:
         ioHandler.newImage(context, this);
         break;
+      case OverflowMenuOption.advancedOptions:
+        _showAdvancedOptionsDialog();
+        break;
     }
+  }
+
+  Future<void> _showAdvancedOptionsDialog() async {
+    bool isAntialiasingEnabled = false;
+    bool isSmoothingEnabled = false;
+
+    await showDialog<void>(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('Advanced Options'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SwitchListTile(
+                    title: const Text('Antialiasing'),
+                    value: isAntialiasingEnabled,
+                    onChanged: (value) =>
+                        setDialogState(() => isAntialiasingEnabled = value),
+                  ),
+                  SwitchListTile(
+                    title: const Text('Smoothing'),
+                    value: isSmoothingEnabled,
+                    onChanged: (value) =>
+                        setDialogState(() => isSmoothingEnabled = value),
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('CANCEL'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   void _enterFullscreen() =>
