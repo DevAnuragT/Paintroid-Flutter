@@ -98,8 +98,11 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
   }
 
   Future<void> _showAdvancedOptionsDialog() async {
-    final localizations = AppLocalizations.of(context);
     final prefs = await SharedPreferences.getInstance();
+
+    if (!mounted) {
+      return;
+    }
 
     bool isAntialiasingEnabled =
       prefs.getBool(_advancedOptionsAntialiasingKey) ?? false;
@@ -109,6 +112,8 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
     await showDialog<void>(
       context: context,
       builder: (context) {
+        final localizations = AppLocalizations.of(context);
+
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
@@ -137,6 +142,8 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
                 ),
                 TextButton(
                   onPressed: () async {
+                    final navigator = Navigator.of(context);
+
                     await prefs.setBool(
                       _advancedOptionsAntialiasingKey,
                       isAntialiasingEnabled,
@@ -146,9 +153,7 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
                       isSmoothingEnabled,
                     );
 
-                    if (context.mounted) {
-                      Navigator.of(context).pop();
-                    }
+                    navigator.pop();
                   },
                   child: Text(localizations.ok),
                 ),
