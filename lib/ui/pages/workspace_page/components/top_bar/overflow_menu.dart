@@ -113,22 +113,47 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
       context: context,
       builder: (context) {
         final localizations = AppLocalizations.of(context);
+        final theme = PaintroidTheme.of(context);
 
         return StatefulBuilder(
           builder: (context, setDialogState) {
             return AlertDialog(
-              title: Text(localizations.advancedOptions),
+              backgroundColor: theme.onSurfaceColor,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(2.0)),
+              ),
+              title: Text(
+                localizations.advancedOptions,
+                style: theme.titleTheme.titleMedium,
+              ),
+              contentTextStyle: theme.textTheme.bodyMedium?.apply(
+                color: theme.shadowColor,
+              ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SwitchListTile(
-                    title: Text(localizations.antialiasing),
+                    contentPadding: EdgeInsets.zero,
+                    activeColor: theme.primaryColor,
+                    title: Text(
+                      localizations.antialiasing,
+                      style: theme.textTheme.bodyMedium?.apply(
+                        color: theme.shadowColor,
+                      ),
+                    ),
                     value: isAntialiasingEnabled,
                     onChanged: (value) =>
                         setDialogState(() => isAntialiasingEnabled = value),
                   ),
                   SwitchListTile(
-                    title: Text(localizations.smoothing),
+                    contentPadding: EdgeInsets.zero,
+                    activeColor: theme.primaryColor,
+                    title: Text(
+                      localizations.smoothing,
+                      style: theme.textTheme.bodyMedium?.apply(
+                        color: theme.shadowColor,
+                      ),
+                    ),
                     value: isSmoothingEnabled,
                     onChanged: (value) =>
                         setDialogState(() => isSmoothingEnabled = value),
@@ -138,7 +163,10 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
               actions: [
                 TextButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  child: Text(localizations.cancel),
+                  child: Text(
+                    localizations.cancel,
+                    style: TextStyle(color: theme.primaryColor),
+                  ),
                 ),
                 TextButton(
                   onPressed: () async {
@@ -155,7 +183,10 @@ class _OverflowMenuState extends ConsumerState<OverflowMenu> {
 
                     navigator.pop();
                   },
-                  child: Text(localizations.ok),
+                  child: Text(
+                    localizations.ok,
+                    style: TextStyle(color: theme.primaryColor),
+                  ),
                 ),
               ],
             );
